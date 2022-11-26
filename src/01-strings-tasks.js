@@ -111,8 +111,12 @@ function removeLeadingAndTrailingWhitespaces(value) {
  *   'A', 5  => 'AAAAA'
  *   'cat', 3 => 'catcatcat'
  */
-function repeatString(/* value, count */) {
-  throw new Error('Not implemented');
+function repeatString(value, count) {
+  let res = '';
+  for (let i = 0; i < count; i += 1) {
+    res += value;
+  }
+  return res;
 }
 
 /**
@@ -203,8 +207,13 @@ function extractEmails(str) {
  *             '└──────────┘\n'
  *
  */
-function getRectangleString(/* width, height */) {
-  throw new Error('Not implemented');
+function getRectangleString(width, height) {
+  let res = '';
+
+  res += `┌${'─'.repeat(width - 2)}┐\n`;
+  res += `│${' '.repeat(width - 2)}│\n`.repeat(height - 2);
+  res += `└${'─'.repeat(width - 2)}┘\n`;
+  return res;
 }
 
 
