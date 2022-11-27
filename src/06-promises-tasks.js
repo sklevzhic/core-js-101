@@ -28,8 +28,16 @@
  *      .catch((error) => console.log(error.message)) // 'Error: Wrong parameter is passed!
  *                                                    //  Ask her again.';
  */
-function willYouMarryMe(/* isPositiveAnswer */) {
-  throw new Error('Not implemented');
+function willYouMarryMe(isPositiveAnswer) {
+  return new Promise((resolve, reject) => {
+    if (isPositiveAnswer === true) {
+      resolve('Hooray!!! She said "Yes"!');
+    } else if (isPositiveAnswer === false) {
+      resolve('Oh no, she said "No".');
+    } else {
+      reject(new Error('Wrong parameter is passed! Ask her again.'));
+    }
+  });
 }
 
 
@@ -48,8 +56,8 @@ function willYouMarryMe(/* isPositiveAnswer */) {
  *    })
  *
  */
-function processAllPromises(/* array */) {
-  throw new Error('Not implemented');
+function processAllPromises(array) {
+  return Promise.all(array);
 }
 
 /**
@@ -71,8 +79,8 @@ function processAllPromises(/* array */) {
  *    })
  *
  */
-function getFastestPromise(/* array */) {
-  throw new Error('Not implemented');
+function getFastestPromise(array) {
+  return Promise.race(array);
 }
 
 /**
@@ -92,9 +100,36 @@ function getFastestPromise(/* array */) {
  *    });
  *
  */
-function chainPromises(/* array, action */) {
-  throw new Error('Not implemented');
+
+// const promise = new Promise((resolve, reject) => {
+//   setTimeout(() => {
+//     resolve("Yes")
+//   }, 2000)
+// })
+//
+// const promise2 = new Promise((resolve, reject) => {
+//   setTimeout(() => {
+//     resolve("Yes")
+//   }, 5000)
+// })
+
+function chainPromises(array, action) {
+  const res = [];
+  return new Promise((resolve) => {
+    for (let i = 0; i <= array.length - 1; i += 1) {
+      if (i === array.length - 1) {
+        array[i].then((r) => {
+          res.push(r);
+          resolve(res);
+        }).catch((error) => new Error(error));
+      } else {
+        array[i].then((r) => res.push(r)).catch((error) => new Error(error));
+      }
+    }
+  }).then((ff) => ff.reduce(action));
 }
+
+// chainPromises([promise, promise, promise2])
 
 module.exports = {
   willYouMarryMe,
