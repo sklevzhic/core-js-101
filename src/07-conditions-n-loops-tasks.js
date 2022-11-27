@@ -27,8 +27,11 @@
  *  21 => 'Fizz'
  *
  */
-function getFizzBuzz(/* num */) {
-  throw new Error('Not implemented');
+function getFizzBuzz(num) {
+  if (num % 3 === 0 && num % 5 === 0) return 'FizzBuzz';
+  if (num % 3 === 0) return 'Fizz';
+  if (num % 5 === 0) return 'Buzz';
+  return num;
 }
 
 
@@ -43,10 +46,16 @@ function getFizzBuzz(/* num */) {
  *   5  => 120
  *   10 => 3628800
  */
-function getFactorial(/* n */) {
-  throw new Error('Not implemented');
-}
+function getFactorial(n) {
+  if (n === 0) return 1;
+  let sum = 1;
 
+  for (let i = 1; i <= n; i += 1) {
+    sum *= i;
+  }
+
+  return sum;
+}
 
 /**
  * Returns the sum of integer numbers between n1 and n2 (inclusive).
@@ -60,8 +69,12 @@ function getFactorial(/* n */) {
  *   5,10  =>  45 ( = 5+6+7+8+9+10 )
  *   -1,1  =>  0  ( = -1 + 0 + 1 )
  */
-function getSumBetweenNumbers(/* n1, n2 */) {
-  throw new Error('Not implemented');
+function getSumBetweenNumbers(n1, n2) {
+  let sum = 0;
+  for (let i = n1; i <= n2; i += 1) {
+    sum += i;
+  }
+  return sum;
 }
 
 
@@ -80,8 +93,8 @@ function getSumBetweenNumbers(/* n1, n2 */) {
  *   10,1,1   =>  false
  *   10,10,10 =>  true
  */
-function isTriangle(/* a, b, c */) {
-  throw new Error('Not implemented');
+function isTriangle(a, b, c) {
+  return (a < (b + c)) && ((a + b) > c) && ((a + c) > b);
 }
 
 
@@ -164,10 +177,27 @@ function isInsideCircle(/* circle, point */) {
  *   'abracadabra'  => 'c'
  *   'entente' => null
  */
-function findFirstSingleChar(/* str */) {
-  throw new Error('Not implemented');
+function findFirstSingleChar(str) {
+  const arr = str.split('');
+  const lettersCount = arr.reduce((acc, el) => {
+    if (acc[el]) {
+      acc[el] += 1;
+    } else {
+      acc[el] = 1;
+    }
+    return acc;
+  }, {});
+
+  const uniqueLetters = Object.entries(lettersCount).filter((el) => el[1] === 1);
+  if (uniqueLetters[0]) {
+    return uniqueLetters[0][0];
+  }
+  return null;
 }
 
+// function isContainChar(el) {
+//   return 1;
+// }
 
 /**
  * Returns the string representation of math interval,
@@ -191,8 +221,8 @@ function findFirstSingleChar(/* str */) {
  *   5, 3, true, true   => '[3, 5]'
  *
  */
-function getIntervalString(/* a, b, isStartIncluded, isEndIncluded */) {
-  throw new Error('Not implemented');
+function getIntervalString(a, b, isStartIncluded, isEndIncluded) {
+  return `${isStartIncluded ? '[' : '('}${Math.min(a, b)}, ${Math.max(a, b)}${isEndIncluded ? ']' : ')'}`;
 }
 
 
@@ -208,8 +238,8 @@ function getIntervalString(/* a, b, isStartIncluded, isEndIncluded */) {
  * 'rotator' => 'rotator'
  * 'noon' => 'noon'
  */
-function reverseString(/* str */) {
-  throw new Error('Not implemented');
+function reverseString(str) {
+  return str.split('').reverse().join('');
 }
 
 
@@ -225,8 +255,8 @@ function reverseString(/* str */) {
  *   87354 => 45378
  *   34143 => 34143
  */
-function reverseInteger(/* num */) {
-  throw new Error('Not implemented');
+function reverseInteger(num) {
+  return num.toString().split('').reverse().join('');
 }
 
 
@@ -252,6 +282,7 @@ function reverseInteger(/* num */) {
  */
 function isCreditCardNumber(/* ccn */) {
   throw new Error('Not implemented');
+  // return ccn.toString().match(/[0-9]/g).length === 16;
 }
 
 /**
@@ -268,8 +299,14 @@ function isCreditCardNumber(/* ccn */) {
  *   10000 ( 1+0+0+0+0 = 1 ) => 1
  *   165536 (1+6+5+5+3+6 = 26,  2+6 = 8) => 8
  */
-function getDigitalRoot(/* num */) {
-  throw new Error('Not implemented');
+function getDigitalRoot(num) {
+  let sum = num;
+
+  while (sum >= 10) {
+    sum = String(sum).split('').reduce((acc, el) => +acc + +el, 0);
+  }
+
+  return sum;
 }
 
 
@@ -284,7 +321,7 @@ function getDigitalRoot(/* num */) {
  *
  * @example:
  *   '' => true
- *   '[]'  => true
+ *   'l'  => true
  *   '{}'  => true
  *   '()   => true
  *   '[[]' => false
@@ -294,10 +331,29 @@ function getDigitalRoot(/* num */) {
  *   '{)' = false
  *   '{[(<{[]}>)]}' = true
  */
-function isBracketsBalanced(/* str */) {
-  throw new Error('Not implemented');
-}
+function isBracketsBalanced(str) {
+  const brackets = {
+    ']': '[',
+    ')': '(',
+    '}': '{',
+    '>': '<',
+  };
+  const stack = [];
 
+  for (let i = 0; i <= str.length - 1; i += 1) {
+    if (Object.values(brackets).includes(str[i])) {
+      stack.push(str[i]);
+    }
+    if (Object.keys(brackets).includes(str[i])) {
+      if ((stack[stack.length - 1] === brackets[str[i]]) && stack.length !== 0) {
+        stack.pop();
+      } else {
+        return false;
+      }
+    }
+  }
+  return stack.length === 0;
+}
 
 /**
  * Returns the string with n-ary (binary, ternary, etc, where n <= 10)
@@ -319,8 +375,8 @@ function isBracketsBalanced(/* str */) {
  *    365, 4  => '11231'
  *    365, 10 => '365'
  */
-function toNaryString(/* num, n */) {
-  throw new Error('Not implemented');
+function toNaryString(num, n) {
+  return num.toString(n);
 }
 
 
@@ -336,8 +392,17 @@ function toNaryString(/* num, n */) {
  *   ['/web/assets/style.css', '/.bin/mocha',  '/read.me'] => '/'
  *   ['/web/favicon.ico', '/web-scripts/dump', '/verbalizer/logs'] => '/'
  */
-function getCommonDirectoryPath(/* pathes */) {
-  throw new Error('Not implemented');
+function getCommonDirectoryPath(pathes) {
+  const newPathes = pathes.map((el) => el.replaceAll('/', '*/').split('/'));
+  newPathes.map((el) => el.map((el1) => `${el1}/`));
+  const res = [];
+
+  newPathes[0].forEach((el1, i) => {
+    if (newPathes.every((el) => el[i] === el1)) {
+      res.push(el1);
+    }
+  });
+  return res.join('').replaceAll('*', '/');
 }
 
 
@@ -394,10 +459,28 @@ function getMatrixProduct(/* m1, m2 */) {
  *    [    ,   ,    ]]
  *
  */
-function evaluateTicTacToePosition(/* position */) {
-  throw new Error('Not implemented');
-}
+function evaluateTicTacToePosition(position) {
+  const lines = [
+    [[0, 0], [0, 1], [0, 2]],
+    [[1, 0], [1, 1], [1, 2]],
+    [[2, 0], [2, 1], [2, 2]],
+    [[0, 0], [1, 0], [2, 0]],
+    [[0, 1], [1, 1], [2, 1]],
+    [[0, 2], [1, 2], [2, 2]],
+    [[0, 0], [1, 1], [2, 2]],
+    [[2, 0], [1, 1], [0, 2]],
+  ];
 
+  for (let i = 0; i <= lines.length - 1; i += 1) {
+    const values = [];
+    lines[i].forEach((el) => {
+      values.push(position[el[0]][el[1]]);
+    });
+    if (values.every((el) => el === 'X')) return values[0];
+    if (values.every((el) => el === '0')) return values[0];
+  }
+  return undefined;
+}
 
 module.exports = {
   getFizzBuzz,

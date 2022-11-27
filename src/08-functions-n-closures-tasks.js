@@ -62,26 +62,20 @@ function getPowerFunction(exponent) {
  *   getPolynom(8)     => y = 8
  *   getPolynom()      => null
  */
-function getPolynom() {
-  throw new Error('Not implemented');
-  // const arr = rest.reverse();
-  // if (arr.length === 0) return null;
-  //
-  // const a = arr.map((el, i) => {
-  //   if (i === 0) {
-  //     return el;
-  //   }
-  //   if (i === 1) {
-  //     return el + '*x';
-  //   }
-  //   return el + `*x^${i}`;
-  // }).reverse().join(' + ');
-  // const val = a
-  //   .replaceAll('+ -', '- ')
-  //   .replaceAll('1*x', 'x');
-  // return `y = ${val}`;
+function getPolynom(...args) {
+  return (x) => {
+    if (args.length === 3) {
+      return args[0] * x ** 2 + args[1] * x + args[2];
+    }
+    if (args.length === 2) {
+      return args[0] * x + args[1];
+    }
+    if (args.length === 1) {
+      return args[0];
+    }
+    return null;
+  };
 }
-
 
 /**
  * Memoizes passed function and returns function
@@ -146,9 +140,18 @@ function retry(/* func, attempts */) {
  *
  */
 function logger(func, logFunc) {
-  return (val) => logFunc(func(val));
+  return (...args) => {
+    const argsText = JSON.stringify(args).slice(1, -1);
+    logFunc(`${func.name}(${argsText}) starts`);
+    const result = func(...args);
+    logFunc(`${func.name}(${argsText}) ends`);
+    return result;
+  };
 }
 
+// const cosLogger = logger(['expected', 'test', 1], 0);
+// const result = cosLogger(Math.PI);
+// console.log(result)
 
 /**
  * Return the function with partial applied arguments
