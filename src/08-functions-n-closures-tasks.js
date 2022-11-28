@@ -91,8 +91,16 @@ function getPolynom(...args) {
  *   ...
  *   memoizer() => the same random number  (next run, returns the previous cached result)
  */
-function memoize(/* func */) {
-  throw new Error('Not implemented');
+function memoize(func) {
+  const cache = {};
+  return (v) => {
+    if (v in cache) {
+      return cache[v];
+    }
+    const res = func(v);
+    cache[v] = res;
+    return res;
+  };
 }
 
 
@@ -111,11 +119,24 @@ function memoize(/* func */) {
  * }, 2);
  * retryer() => 2
  */
-function retry(/* func, attempts */) {
-  throw new Error('Not implemented');
+function retry(func, attempts) {
+  if (attempts === 0) {
+    return func();
+  }
+  return () => retry(func, attempts - 1);
 }
 
-
+// const maxAttemps = 3;
+// const expected = 'expected';
+// let attemps = 0;
+//
+// const fn = () => {
+//   attemps += 1;
+//   if (attemps < maxAttemps) throw new Error();
+//   return expected;
+// };
+// const actual = retry(fn, maxAttemps)();
+// console.log(actual)
 /**
  * Returns the logging wrapper for the specified method,
  * Logger has to log the start and end of calling the specified function.

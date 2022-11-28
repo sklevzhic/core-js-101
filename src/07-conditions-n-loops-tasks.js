@@ -130,10 +130,18 @@ function isTriangle(a, b, c) {
  *   { top:20, left:20, width: 20, height: 20 }    =>  false
  *
  */
-function doRectanglesOverlap(/* rect1, rect2 */) {
-  throw new Error('Not implemented');
-}
+function doRectanglesOverlap(rect1, rect2) {
+  const valuesX1 = [rect1.left, rect1.left + rect1.width];
+  const valuesY1 = [rect1.top, rect1.top + rect1.height];
 
+  const valuesX2 = [rect2.left, rect2.left + rect2.width];
+  const valuesY2 = [rect2.top, rect2.top + rect2.height];
+
+  if (valuesX2[0] <= valuesX1[1] && valuesY2[0] <= valuesY1[1]) {
+    return true;
+  }
+  return false;
+}
 
 /**
  * Returns true, if point lies inside the circle, otherwise false.
@@ -282,11 +290,19 @@ function reverseInteger(num) {
  *   5436468789016589 => false
  *   4916123456789012 => false
  */
-function isCreditCardNumber(/* ccn */) {
-  throw new Error('Not implemented');
-  // return ccn.toString().match(/[0-9]/g).length === 16;
+function isCreditCardNumber(ccn) {
+  const reversedCNNArr = ccn.toString().split('').reverse();
+  const changedArr = reversedCNNArr.map((el, i) => {
+    if ((i % 2 === 1)) {
+      const newV = el * 2;
+      return newV >= 10 ? +newV.toString()[0] + +newV.toString()[1] : newV;
+    }
+    return +el;
+  });
+  const controlSum = changedArr.reduce((a, b) => a + b);
+  const controlFigure = (10 - (controlSum % 10)) % 10;
+  return controlFigure === 0;
 }
-
 /**
  * Returns the digital root of integer:
  *   step1 : find sum of all digits
@@ -426,10 +442,23 @@ function getCommonDirectoryPath(pathes) {
  *                         [ 6 ]]
  *
  */
-function getMatrixProduct(/* m1, m2 */) {
-  throw new Error('Not implemented');
+function getMatrixProduct(m1, m2) {
+  const rowsA = m1.length;
+  const colsA = m1[0].length;
+  const rowsB = m2.length;
+  const colsB = m2[0].length;
+  const C = [];
+  if (colsA !== rowsB) return false;
+  for (let i = 0; i < rowsA; i += 1) C[i] = [];
+  for (let k = 0; k < colsB; k += 1) {
+    for (let i = 0; i < rowsA; i += 1) {
+      let t = 0;
+      for (let j = 0; j < rowsB; j += 1) t += m1[i][j] * m2[j][k];
+      C[i][k] = t;
+    }
+  }
+  return C;
 }
-
 
 /**
  * Returns the evaluation of the specified tic-tac-toe position.
